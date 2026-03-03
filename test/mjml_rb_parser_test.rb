@@ -7,7 +7,7 @@ describe Mjml::MjmlRbParser do
   let(:input) { '<mjml><mj-body><mj-text>Hello World</mj-text></mj-body></mjml>' }
 
   after do
-    Object.send(:remove_const, :MJML) if defined?(::MJML)
+    Object.send(:remove_const, :MjmlRb) if defined?(::MjmlRb)
   end
 
   describe '#render' do
@@ -46,9 +46,9 @@ describe Mjml::MjmlRbParser do
   private
 
   def stub_mjml_rb(result)
-    Object.send(:remove_const, :MJML) if defined?(::MJML)
+    Object.send(:remove_const, :MjmlRb) if defined?(::MjmlRb)
     mjml_rb = Module.new
     mjml_rb.define_singleton_method(:to_html) { |_input, _options = {}| result }
-    Object.const_set(:MJML, mjml_rb)
+    Object.const_set(:MjmlRb, mjml_rb)
   end
 end

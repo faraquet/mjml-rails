@@ -190,7 +190,7 @@ MJML-Rails has the following settings with defaults:
   Enabling this will allow you to use Rust implementation of MJML via the `mrml` gem. It comes with prebuilt binaries instead of having to install MJML along with Node. When enabled the options `mjml_binary_version_supported`, `mjml_binary`, `minify`, `beautify` and `validation_level` are ignored.
 
 - `use_mjml_rb: false`
-  Enabling this will use `mjml-rb` parser (via `MJML.to_html`) instead of the MJML Node binary. This parser receives `minify`, `beautify` and `validation_level` options from `mjml-rails`. If both `use_mrml` and `use_mjml_rb` are enabled, `use_mjml_rb` takes precedence.
+  Enabling this will use `mjml-rb` parser (via `MjmlRb.to_html`) instead of the MJML Node binary. This parser receives `minify`, `beautify` and `validation_level` options from `mjml-rails`. If both `use_mrml` and `use_mjml_rb` are enabled, `use_mjml_rb` takes precedence.
 
 - `cache_mjml: false`
   By default, MJML-Rails does not cache compiled templates. Setting this to `true` will cache compiled templates in `tmp/mjml_cache` to improve performance for frequently used templates.

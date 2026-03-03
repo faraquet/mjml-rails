@@ -49,9 +49,9 @@ module Mjml
     private
 
     def run
-      raise NameError unless defined?(::MJML) && ::MJML.respond_to?(:to_html)
+      raise NameError unless defined?(::MjmlRb) && ::MjmlRb.respond_to?(:to_html)
 
-      normalize_result(::MJML.to_html(input, build_options))
+      normalize_result(::MjmlRb.to_html(input, build_options))
     end
 
     def normalize_result(raw_result)

@@ -137,7 +137,7 @@ module Mjml
   def self.check_for_mjml_rb_binary
     return unless Mjml.use_mjml_rb
 
-    return true if defined?(::MJML) && ::MJML.respond_to?(:to_html)
+    return true if defined?(::MjmlRb) && ::MjmlRb.respond_to?(:to_html)
 
     Mjml.mjml_binary_error_string = 'Couldn\'t find MJML-RB - did you add \'mjml-rb\' to your Gemfile?'
     false
