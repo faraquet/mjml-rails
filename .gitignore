@@ -5,4 +5,4 @@ test/tmp
 *.sublime-*
 node_modules
 .byebug_history
-
+.idea

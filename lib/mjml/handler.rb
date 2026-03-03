@@ -16,7 +16,13 @@ module Mjml
     def call(template, source = nil)
       compiled_source = compile_source(source, template)
 
-      parser_class = Mjml.use_mrml ? 'MrmlParser' : 'Parser'
+      parser_class = if Mjml.use_mjml_rb
+                       'MjmlRbParser'
+                     elsif Mjml.use_mrml
+                       'MrmlParser'
+                     else
+                       'Parser'
+                     end
       template_path = template.respond_to?(:virtual_path) ? template.virtual_path : template.identifier
       # Per MJML v4 syntax documentation[0] valid/render'able document MUST start with <mjml> root tag
       # If we get here and template source doesn't start with one it means
