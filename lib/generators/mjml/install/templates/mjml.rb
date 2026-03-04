@@ -21,6 +21,9 @@ Mjml.setup do |config|
   # Use MRML instead of MJML (requires mrml gem)
   config.use_mrml = false
 
+  # Use MJML-RB instead of MJML (requires mjml-rb gem)
+  config.use_mjml_rb = false
+
   # Cache compiled templates for better performance
   config.cache_mjml = false
 

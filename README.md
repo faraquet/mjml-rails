@@ -124,6 +124,32 @@ end
 
 **Note**: MRML does not fully support all MJML functionalities, see [Missing implementations](https://github.com/jdrouet/mrml#missing-implementations)
 
+### Using MJML-RB (pure Ruby parser)
+
+If you want to use a Ruby implementation of MJML without Node, you can use [`mjml-rb`](https://github.com/andriichuk/mjml-rb).
+
+Add `mjml-rails` and `mjml-rb` to your Gemfile.
+
+```ruby
+gem 'mjml-rails'
+gem 'mjml-rb'
+```
+
+Run the following command to install it:
+
+```console
+bundle install
+```
+
+Set `use_mjml_rb` option to `true` in your initializer:
+
+```ruby
+# config/initializers/mjml.rb
+Mjml.setup do |config|
+  config.use_mjml_rb = true
+end
+```
+
 ## Configuration
 
 MJML-Rails has the following settings with defaults:
@@ -163,6 +189,9 @@ MJML-Rails has the following settings with defaults:
 - `use_mrml: false`
   Enabling this will allow you to use Rust implementation of MJML via the `mrml` gem. It comes with prebuilt binaries instead of having to install MJML along with Node. When enabled the options `mjml_binary_version_supported`, `mjml_binary`, `minify`, `beautify` and `validation_level` are ignored.
 
+- `use_mjml_rb: false`
+  Enabling this will use `mjml-rb` parser (via `MjmlRb.to_html`) instead of the MJML Node binary. This parser receives `minify`, `beautify` and `validation_level` options from `mjml-rails`. If both `use_mrml` and `use_mjml_rb` are enabled, `use_mjml_rb` takes precedence.
+
 - `cache_mjml: false`
   By default, MJML-Rails does not cache compiled templates. Setting this to `true` will cache compiled templates in `tmp/mjml_cache` to improve performance for frequently used templates.
 
@@ -189,6 +218,9 @@ Mjml.setup do |config|
 
   # Use MRML instead of MJML, false by default
   config.use_mrml = false
+
+  # Use MJML-RB instead of MJML, false by default
+  config.use_mjml_rb = false
 
   # Use custom MJML binary with custom version
   config.mjml_binary = "/path/to/custom/mjml"

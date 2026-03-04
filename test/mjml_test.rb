@@ -120,12 +120,14 @@ describe Mjml do
       Mjml.mjml_binary = nil
       Mjml.valid_mjml_binary = nil
       Mjml.use_mrml = nil
+      Mjml.use_mjml_rb = nil
     end
 
     after do
       Mjml.mjml_binary = nil
       Mjml.valid_mjml_binary = nil
       Mjml.use_mrml = nil
+      Mjml.use_mjml_rb = nil
     end
 
     it 'can be set to a custom value with mjml_binary if version is correct' do
@@ -182,6 +184,28 @@ describe Mjml do
       assert_nil(Mjml.valid_mjml_binary)
     ensure
       ENV['PATH'] = old_path
+    end
+
+    it 'can use MJML-RB and check for a valid binary' do
+      Mjml.use_mjml_rb = true
+      Mjml.stubs(:check_for_custom_mjml_binary).returns(false)
+      Mjml.stubs(:check_for_bun_mjml_binary).returns(false)
+      Mjml.stubs(:check_for_package_mjml_binary).returns(false)
+      Mjml.stubs(:check_for_global_mjml_binary).returns(false)
+
+      Object.send(:remove_const, :MjmlRb) if defined?(::MjmlRb)
+      mjml_rb = Module.new
+      mjml_rb.define_singleton_method(:to_html) { |_input, _options = {}| { html: '<html></html>', errors: [] } }
+      Object.const_set(:MjmlRb, mjml_rb)
+      expect(Mjml.valid_mjml_binary).must_equal(true)
+
+      Mjml.valid_mjml_binary = nil
+      Object.send(:remove_const, :MjmlRb)
+      Mjml.stubs(:puts) # silence printed error message from test output
+      assert_nil(Mjml.valid_mjml_binary)
+      expect(Mjml.mjml_binary_error_string).must_equal 'Couldn\'t find MJML-RB - did you add \'mjml-rb\' to your Gemfile?'
+    ensure
+      Object.send(:remove_const, :MjmlRb) if defined?(::MjmlRb)
     end
   end
 end

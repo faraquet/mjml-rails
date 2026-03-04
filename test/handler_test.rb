@@ -80,4 +80,40 @@ class HandlerTest < ActiveSupport::TestCase
   ensure
     Mjml.unstub(:use_mrml)
   end
+
+  test 'uses MjmlRbParser when use_mjml_rb is true' do
+    Mjml.stubs(:use_mjml_rb).returns(true)
+
+    template = mock
+    template.stubs(:virtual_path).returns('/path/to/template')
+    template.stubs(:respond_to?).with(:virtual_path).returns(true)
+
+    compiled_source = '<mjml><mj-body><mj-text>Full document</mj-text></mj-body></mjml>'
+    @handler.stubs(:compile_source).returns(compiled_source)
+
+    result = @handler.call(template)
+
+    assert_includes result, "Mjml::MjmlRbParser.new('/path/to/template'"
+  ensure
+    Mjml.unstub(:use_mjml_rb)
+  end
+
+  test 'prefers MjmlRbParser when both use_mrml and use_mjml_rb are true' do
+    Mjml.stubs(:use_mrml).returns(true)
+    Mjml.stubs(:use_mjml_rb).returns(true)
+
+    template = mock
+    template.stubs(:virtual_path).returns('/path/to/template')
+    template.stubs(:respond_to?).with(:virtual_path).returns(true)
+
+    compiled_source = '<mjml><mj-body><mj-text>Full document</mj-text></mj-body></mjml>'
+    @handler.stubs(:compile_source).returns(compiled_source)
+
+    result = @handler.call(template)
+
+    assert_includes result, "Mjml::MjmlRbParser.new('/path/to/template'"
+  ensure
+    Mjml.unstub(:use_mrml)
+    Mjml.unstub(:use_mjml_rb)
+  end
 end

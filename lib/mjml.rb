@@ -6,6 +6,7 @@ require 'open3'
 require 'mjml/handler'
 require 'mjml/parser'
 require 'mjml/mrml_parser'
+require 'mjml/mjml_rb_parser'
 require 'mjml/railtie' if defined?(Rails)
 
 module Mjml
@@ -20,6 +21,7 @@ module Mjml
     :template_language,
     :validation_level,
     :use_mrml,
+    :use_mjml_rb,
     :cache_mjml
 
   mattr_writer :valid_mjml_binary
@@ -33,6 +35,7 @@ module Mjml
   self.minify = false
   self.validation_level = 'strict'
   self.use_mrml = false
+  self.use_mjml_rb = false
   self.fonts = nil
   self.cache_mjml = false
 
@@ -62,6 +65,7 @@ module Mjml
     self.valid_mjml_binary = @@valid_mjml_binary ||
                              check_for_custom_mjml_binary ||
                              check_for_mrml_binary ||
+                             check_for_mjml_rb_binary ||
                              check_for_bun_mjml_binary ||
                              check_for_package_mjml_binary ||
                              check_for_global_mjml_binary
@@ -127,6 +131,15 @@ module Mjml
     MRML.present?
   rescue NameError
     Mjml.mjml_binary_error_string = 'Couldn\'t find MRML - did you add \'mrml\' to your Gemfile?'
+    false
+  end
+
+  def self.check_for_mjml_rb_binary
+    return unless Mjml.use_mjml_rb
+
+    return true if defined?(::MjmlRb) && ::MjmlRb.respond_to?(:to_html)
+
+    Mjml.mjml_binary_error_string = 'Couldn\'t find MJML-RB - did you add \'mjml-rb\' to your Gemfile?'
     false
   end
 
